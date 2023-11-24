@@ -1,30 +1,33 @@
-import React,{useContext} from 'react'
+import React,{useContext, useEffect} from 'react'
 import {Link} from 'react-router-dom'
-import { UserContext } from '../App'
-
+import { UseSelector, useSelector } from 'react-redux';
 const Navbar = () => {
-  const {state,dispatch}=useContext(UserContext)
-  const renderList=()=>{
-    if(state){
-    return [
-<li><Link to="/profile" >Profile</Link></li>,
-        <li><Link to="/createpost" >Create Post</Link></li>
-    ]
-  }
-    else{
-      return[
-      <li><Link to="/login">Signin</Link></li>,
-        <li><Link to="/signup">Signup</Link></li>
-    ]
-  }
-  }
+  const data = useSelector((state)=>state.user.data);
+  
+
  return (
 <nav>
     <div className="nav-wrapper white" >
-      <Link to={state?"/":"/login" }className="brand-logo left">Instagram</Link>
+      <Link className="brand-logo left">Instagram</Link>
       <ul id="nav-mobile" className="right">
-        {renderList()}
-        
+       {
+        data ? <>
+          <li>
+          <Link to={'/'}>create Post</Link>
+          </li>
+          <li>
+          <Link>Profile</Link>
+          </li>
+        </> 
+        : <>
+        <li>
+          <Link>Signin</Link>
+        </li>
+        <li>
+          <Link>Signup</Link>
+        </li>
+        </>
+       }
       </ul>
     </div>
   </nav>
