@@ -1,7 +1,8 @@
-const express=require(express);
+const express=require('express');
 const router=express.Router();
+const mongoose = require('mongoose')
 const requireLogin= require('../middleware/requireLogin')
-const Post=require('../model/post')
+const Post=require('../models/post')
 
 
 router.get('/allpost',requireLogin,(req,res)=>{
@@ -20,12 +21,12 @@ router.get('/allpost',requireLogin,(req,res)=>{
 
 
 
-router.post('/createpost',requireLogin,(req,res)=>{
+router.post('/postcreate',(req,res)=>{
     const {title,body,pic} = req.body 
     if(!title || !body || !pic){
-      return  res.status(422).json({error:"Please add all the fields"})
+      return  res.send({error:"Please add all the fields"})
     }
-    req.user.password = undefined
+    // req.user.password = 
     const post = new Post({
         title,
         body,
@@ -39,3 +40,4 @@ router.post('/createpost',requireLogin,(req,res)=>{
         console.log(err)
     })
 })
+module.exports=router;

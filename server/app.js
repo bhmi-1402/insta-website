@@ -3,12 +3,20 @@ const app=express();
 const mongoose=require('mongoose');
 const PORT=8000;
 const {MONGO_URL}=require('./keys');
+const cors=require('cors');
+const bodyParser = require("body-parser");
+
+app.use
+app.use(cors());
+app.use(bodyParser.json({extended:true}))
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const router= require('./routes/auth')
-// const user= require('./model/user')
-// require('./model/user')
+const router2=require('./routes/post')
+
 app.use(router);
-// app.use(user);
+app.use(router2);
+
 
 
 mongoose.connect(MONGO_URL,{
@@ -22,6 +30,7 @@ mongoose.connection.on('error',(err)=>{
     console.log("err connecting",err);
 })
 app.use(express.json());
+
 
 app.listen(PORT,()=>{
     console.log(`server is running on the ${PORT}`);
