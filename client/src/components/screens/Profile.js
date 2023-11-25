@@ -1,8 +1,28 @@
-import React from 'react'
+import React ,{useEffect, useState}from 'react'
+import { useDispatch } from 'react-redux'
+import {  useSelector } from 'react-redux';
 
 const Profile = () => {
+    const data = useSelector((state)=>state.user.data);
+const dispatch = useDispatch();
+const [mypics,setPics] =useState([])
+useEffect(()=>{
+    fetch('http://localhost:8000/mypost',{
+        headers:{
+            "Authorization":"Bearer "+localStorage.getItem("jwt")
+        }
+    }).then(res=>res.json())
+    .then(result=>{
+        console.log(result)
+        setPics(result.mypost)
+    })
+  },[])
+  
+
+
+
  return (
-    <div style={{maxwisth:"550px",margin:"0px auto"}}>
+    <div style={{maxwidth:"550px",margin:"0px auto"}}>
         <div style={{
             display:"flex",
             justifyContent:"space-around",
@@ -15,7 +35,7 @@ const Profile = () => {
             src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"/>
         </div>
         <div>
-           <h4> Bhoomi Agarwal</h4>
+           <h4> {data?data.name:"loading"}</h4>
            <div style={{display:"flex", justifyContent:"space-around", width:"108%"}}>
             <h5>40 post</h5>
             <h5>40 followers</h5>
@@ -28,12 +48,16 @@ const Profile = () => {
         
         </div>
         <div className="gallery">
-    <img className='item' src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"></img>
-    <img className='item' src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"></img>
-    <img className='item' src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"></img>
-    <img className='item' src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"></img>
-    <img className='item' src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"></img>
-    <img className='item' src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"></img>
+            {
+                mypics.map(item=>{
+                    return(
+                        <img key={item._id} className='item' src={item.photo} alt={item.title}></img>
+                    )
+                    
+    
+                })
+            }
+
 </div>
     </div>
  )

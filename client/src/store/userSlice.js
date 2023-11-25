@@ -10,9 +10,13 @@ const user = createSlice({
             console.log(action.payload);
             state.data = action.payload;
             return;
+        },
+        removeUser:(state,action)=>{
+            state.data=false;
+            return
         }
     }
 })
 
-export const { addUser } = user.actions
+export const { addUser,removeUser } = user.actions
 export default user.reducer;

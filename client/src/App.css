@@ -27,6 +27,10 @@ margin-top: 120px ;
   border-bottom: 1px solid #f48fb1  !important;
   box-shadow: 0 1px 0 0 #f48fb1  !important;
 }
+.input-field input[type=password]:focus {
+  border-bottom: 1px solid #f48fb1  !important;
+  box-shadow: 0 1px 0 0 #f48fb1  !important;
+}
 .input-field .q{
   color:blue  !important;
   cursor: "pointer" 

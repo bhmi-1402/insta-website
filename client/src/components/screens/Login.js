@@ -59,7 +59,7 @@ const Login = () => {
         <h2 className='brand-logos'>Instagram</h2>
         <input type="text" placeholder="Email" value={email}
           onChange={(e)=>setEmail(e.target.value)}></input>
-        <input type="text" placeholder="Password" value={password}
+        <input type="password" placeholder="Password" value={password}
            onChange={(e)=>setPassword(e.target.value)}></input>
         <button className="btn waves-effect waves-light #f48fb1 pink lighten-3" onClick={()=> postData()}>Login
         </button>

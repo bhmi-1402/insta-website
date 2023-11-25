@@ -1,56 +1,54 @@
-import {React,useEffect,createContext,useReducer,useContext} from 'react'
+import {React, useEffect} from 'react'
 import './App.css';
 // import { Routes, Route } from "react-router-dom";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { useNavigate, BrowserRouter, Routes, Route} from "react-router-dom";
 import Navbar  from './components/Navbar'
 import Home  from './components/screens/Home'
 import Signup  from './components/screens/Signup'
 import Login from './components/screens/Login'
 import Profile  from './components/screens/Profile'
 import CreatePost  from './components/screens/CreatePost'
-import {reducer,initialState} from './reducers/userReducer'
+import { useDispatch } from 'react-redux'
+import { addUser } from './store/userSlice'
+import {  useSelector } from 'react-redux';
 
-export const UserContext=createContext()
+  
 
-const Routing=()=>{
-  const Navigate=useNavigate();
-  const{state,dispatch}=useContext(UserContext)
+
+function App() {
+  const data = useSelector((state)=>state.user.data);
+  const dispatch = useDispatch();
+    // const Navigate = useNavigate();
+
+  
   useEffect(()=>{
-const user=JSON.parse(localStorage.getItem("user"))
-if(user){
-  // dispatch({type:"USER",payload:user})
-  Navigate('/')
-}
-else{
-  Navigate('/login')
-}
-  },[])
+    const users=JSON.parse(localStorage.getItem('users'))
+    if(users){
+      dispatch(addUser(data.users))
+    }
+    else{
+      // Navigate('/login');
+    }
+  })
+  
+
   return (
-    <Routes> 
+
+
+    <BrowserRouter>
+  <>
+ <Navbar></Navbar>
+ <Routes> 
  <Route exact path="/" element ={<Home></Home>}></Route>
  <Route path="/signup" element ={<Signup></Signup>}></Route>
  <Route path="/login" element ={<Login></Login>}></Route>
  <Route path="/profile" element ={<Profile></Profile>}></Route>
  <Route path="/createpost" element ={<CreatePost></CreatePost>}></Route> 
   </Routes> 
-  )
-}
-
-
-function App() {
-
-  const [state,dispatch]=useReducer(reducer,initialState)
-  return (
-<UserContext.Provider value={{state,dispatch}}>
-
-    <BrowserRouter>
+  </>
   
- <Navbar></Navbar>
-  <Routing></Routing>
-    
-  
-  </BrowserRouter>
-  </UserContext.Provider>
+   </BrowserRouter> 
+  // </UserContext.Provider>
   );
 }
 
