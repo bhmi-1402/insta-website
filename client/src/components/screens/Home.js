@@ -1,24 +1,34 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux';
-import {Link} from 'react-router-dom'
+import {Link, Navigate, useNavigate} from 'react-router-dom'
 import M from 'materialize-css'
 
 const Home = () => {
+
+    const navigate = useNavigate();
+
     const date = useSelector((state) => state.user.data);
     const dispatch = useDispatch();
 
     const [data, setData] = useState([])
     useEffect(() => {
-        fetch('http://localhost:8000/allpost', {
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem("jwt")
-            }
-        }).then(res => res.json())
+        if(!date){
+            console.log(date);
+            navigate('/login');
+        }else{
+
+            
+            fetch('http://localhost:8000/allpost', {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("jwt")
+                }
+            }).then(res => res.json())
             .then(result => {
                 console.log(result)
                 setData(result.posts)
             })
+        }
     }, [])
     const likePost = (id) => {
         console.log(id);

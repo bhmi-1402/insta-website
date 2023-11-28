@@ -41,7 +41,7 @@ function App() {
   <>
  <Navbar></Navbar>
  <Routes> 
- <Route exact path="/" element ={<Home></Home>}></Route>
+ <Route exact path="/" index element ={<Home></Home>}></Route>
  <Route path="/signup" element ={<Signup></Signup>}></Route>
  <Route path="/login" element ={<Login></Login>}></Route>
  <Route exact path="/profile" element ={<Profile></Profile>}></Route>

@@ -4,9 +4,9 @@ module.exports={
     JWT_SECRET:"efffreyjnhjj6",
     EMAIL_HOST:'smtp.gmail.com',
     EMAIL_PORT:465,
-    EMAIL_USER:'bhoomi1414garwal@gmail.com',
-    EMAIL_PASS:'heiu ufxxonwlofne',
-    EMAIL_FROM:'bhoomi1414agarwal@gmail.com'
+    EMAIL_USER:'yogesh9720chaudhary@gmail.com',
+    EMAIL_PASS:'svys isky hzmm pugx',
+    EMAIL_FROM:'yogesh9720chaudhary@gmail.com'
 }
 
 

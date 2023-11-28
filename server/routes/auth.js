@@ -15,7 +15,6 @@ const transporter = nodemailer.createTransport({
     port: EMAIL_PORT,
     secure: true,
     auth: {
-      
       user: EMAIL_USER,
       pass: EMAIL_PASS,
     },
@@ -34,11 +33,6 @@ router.post('/signup',(req,res)=>{
     if(!email||!password||!name){
        return res.send({error:"please add all the fields"});
     }
-    
-
-
-
-
 
     User.findOne({email:email})
     .then((savedUser)=>{
@@ -54,10 +48,10 @@ router.post('/signup',(req,res)=>{
                   pic:pic
                   
               })
-      
+
               user.save()
               .then(user=>{
-                  transporter.sendMail({
+                    transporter.sendMail({
                     from:EMAIL_FROM,
                     to:user.email,
                     subject:"signup sucessfully",

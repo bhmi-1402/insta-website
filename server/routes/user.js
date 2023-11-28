@@ -5,8 +5,6 @@ const requireLogin= require('../middleware/requireLogin')
 const Post=require('../models/post')
 const User=require('../models/user')
 
-
-
 router.get('/user/:id', requireLogin, async (req, res) => {
     try {
         const user = await User.findOne({ _id: req.params.id }).select("-password");
