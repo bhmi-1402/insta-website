@@ -13,7 +13,7 @@ const {EMAIL_HOST,EMAIL_PORT,EMAIL_USER,EMAIL_PASS,EMAIL_FROM} =require('../keys
 const transporter = nodemailer.createTransport({
     host: EMAIL_HOST,
     port: EMAIL_PORT,
-    secure: false,
+    secure: true,
     auth: {
       
       user: EMAIL_USER,
@@ -71,7 +71,7 @@ router.post('/signup',(req,res)=>{
                   console.log(err)
               })
         })
-        
+
        
     })
     .catch(err=>{
