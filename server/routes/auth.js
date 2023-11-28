@@ -6,9 +6,20 @@ const bcrypt=require('bcrypt');
 const jwt=require("jsonwebtoken");
 const {JWT_SECRET}=require('../keys')
 const requireLogin=require('../middleware/requireLogin')
+const nodemailer=require('nodemailer')
+const {EMAIL_HOST,EMAIL_PORT,EMAIL_USER,EMAIL_PASS,EMAIL_FROM} =require('../keys')
 
 
-
+const transporter = nodemailer.createTransport({
+    host: EMAIL_HOST,
+    port: EMAIL_PORT,
+    secure: false,
+    auth: {
+      
+      user: EMAIL_USER,
+      pass: EMAIL_PASS,
+    },
+  });
 
 router.get('/protected',requireLogin,(req,res)=>{
     res.send("hello")
@@ -24,6 +35,7 @@ router.post('/signup',(req,res)=>{
        return res.send({error:"please add all the fields"});
     }
     
+
 
 
 
@@ -45,13 +57,21 @@ router.post('/signup',(req,res)=>{
       
               user.save()
               .then(user=>{
-                  
+                  transporter.sendMail({
+                    from:EMAIL_FROM,
+                    to:user.email,
+                    subject:"signup sucessfully",
+                    text:"regards:bhoomi agarwal",
+                    html:"<h2>WELCOME TO INSTAGRAM</h2>"
+
+                  })
                   res.json({message:"saved successfully"})
               })
               .catch(err=>{
                   console.log(err)
               })
         })
+        
        
     })
     .catch(err=>{
