@@ -1,11 +1,16 @@
 import React ,{useEffect, useState}from 'react'
 import { useDispatch } from 'react-redux'
 import {  useSelector } from 'react-redux';
+import { updatePic } from '../../store/userSlice'
 
 const Profile = () => {
-    const data = useSelector((state)=>state.user.data);
+    const [mypics,setPics] =useState([])
+    const state = useSelector((state)=>state.user.data);
+    console.log(state)
 const dispatch = useDispatch();
-const [mypics,setPics] =useState([])
+
+const [image,setImage] =useState("")
+const [url,setUrl]=useState("")
 useEffect(()=>{
     fetch('http://localhost:8000/mypost',{
         headers:{
@@ -13,40 +18,98 @@ useEffect(()=>{
         }
     }).then(res=>res.json())
     .then(result=>{
-        console.log(result)
+        // console.log(result)
         setPics(result.mypost)
     })
   },[])
-  
+  useEffect(() => {
+    if (image) {
+        const data = new FormData();
+        data.append("file", image);
+        data.append("upload_preset", "insta-clone");
+        data.append("cloud_name", "bhoomicloud");
 
+        fetch("https://api.cloudinary.com/v1_1/bhoomicloud/image/upload", {
+            method: "post",
+            body: data
+        })
+        .then(res => res.json())
+        .then(data => {
+  fetch('http//localhost:8000/updatepic',{
+    method:"post",
+    headers:{
+        "Content-type":"application/json",
+        "Authorization":"Bearer "+localStorage.getItem('jwt')
+    },
+    body:JSON.stringify({
+        pic:data.url
+    })
+}).then(res=>res.json())
+.then(result=>{
+    console.log(result)
+    localStorage.setItem("user", JSON.stringify({ ...state, pic: result.pic }));
+            dispatch(updatePic(result.pic));
+        
+})
+           
+        })
+        .catch(err => {
+            console.error("Error uploading image to Cloudinary:", err);
+            
+        });
+    }
+}, [image]);
+
+const updatePhoto=(file)=>{
+    setImage(file)
+    
+}
 
 
  return (
     <div style={{maxwidth:"550px",margin:"0px auto"}}>
         <div style={{
+             margin:"18px 0px",
+             borderBottom:"1px solid grey"
+ 
+        }}>
+        <div style={{
             display:"flex",
             justifyContent:"space-around",
-            margin:"18px 0px",
-            borderBottom:"1px solid grey"
+           
 
         }}>
         <div>
             <img style={{width:"140px",height:"140px",borderRadius:'80px'}}
-            src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"/>
+            src={state?state.pic:"loading"}/>
         </div>
+
         <div>
-           <h4> {data?data.name:"loading"}</h4>
-           <div style={{display:"flex", justifyContent:"space-around", width:"108%"}}>
-            <h5>40 post</h5>
-            <h5>40 followers</h5>
-            <h5>40 following</h5>
-           </div>
-        </div>
+                   <h4>{state?state.name:"loading"}</h4>
+                   <h5>{state?state.email:"loading"}</h5>
+                   <div style={{display:"flex",justifyContent:"space-between",width:"108%"}}>
+                       <h6>{mypics.length} posts</h6>
+                       <h6>{state?state.followers.length:"0"} followers</h6>
+                       <h6>{state?state.following.length:"0"} following</h6>
+                   </div>
+
+               </div>
 
 
         
         
         </div>
+       
+       <div className="file-field input-field" style={{margin:"10px"}}>
+      <div className="btn #f48fb1 pink lighten-3">
+        <span>Update profile</span>
+        <input type="file" onChange={(e)=>updatePhoto(e.target.files[0])} />
+      </div>
+      <div className="file-path-wrapper">
+        <input className="file-path validate" type="text" />
+      </div>
+    </div>
+       </div>
         <div className="gallery">
             {
                 mypics.map(item=>{

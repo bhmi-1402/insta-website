@@ -11,6 +11,8 @@ import CreatePost  from './components/screens/CreatePost'
 import { useDispatch } from 'react-redux'
 import { addUser } from './store/userSlice'
 import {  useSelector } from 'react-redux';
+import UserProfile from './components/screens/UserProfile'
+import Subscribed from './components/screens/Subscribed'
 
   
 
@@ -42,8 +44,10 @@ function App() {
  <Route exact path="/" element ={<Home></Home>}></Route>
  <Route path="/signup" element ={<Signup></Signup>}></Route>
  <Route path="/login" element ={<Login></Login>}></Route>
- <Route path="/profile" element ={<Profile></Profile>}></Route>
+ <Route exact path="/profile" element ={<Profile></Profile>}></Route>
  <Route path="/createpost" element ={<CreatePost></CreatePost>}></Route> 
+ <Route path='/profile/:userid' element ={<UserProfile/>}></Route>
+ <Route path='/myfollowingpost' element ={<Subscribed/>}></Route>
   </Routes> 
   </>
   

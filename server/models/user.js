@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-// const {ObjectId} = mongoose.Schema.Types
+const {ObjectId} = mongoose.Schema.Types
 const userSchema = new mongoose.Schema({
     name:{
         type:String,
@@ -12,16 +12,17 @@ const userSchema = new mongoose.Schema({
     password:{
         type:String,
         required:true
-    }
+    },
     // resetToken:String,
     // expireToken:Date,
-    // pic:{
-    //  type:String,
-    //  default:"https://res.cloudinary.com/cnq/image/upload/v1586197723/noimage_d4ipmd.png"
-    // },
-    // followers:[{type:ObjectId,ref:"User"}],
-    // following:[{type:ObjectId,ref:"User"}]
+    pic:{
+     type:String,
+     default:"https://res-console.cloudinary.com/bhoomicloud/thumbnails/v1/image/upload/v1701084890/ZGVmX3BtdTYycg==/grid_landscape"
+    },
+    followers:[{type:ObjectId,ref:"User"}],
+
+    following:[{type:ObjectId,ref:"User"}]
 })
 
-const user= mongoose.model("User",userSchema);
-module.exports=user;
+const User= mongoose.model("User",userSchema);
+module.exports=User;

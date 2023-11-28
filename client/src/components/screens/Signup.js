@@ -1,4 +1,4 @@
-import {React,useState} from 'react'
+import {React,useEffect,useState} from 'react'
 import {Link,useNavigate} from "react-router-dom"
 import M from 'materialize-css'
 import axios from 'axios';
@@ -18,52 +18,74 @@ const Signup= () => {
      const [name,setName] = useState("")
      const [password,setPassword] = useState("")
      const [email,setEmail] = useState("")
+     const [image,setImage] =useState("")
+     const [url,setUrl]=useState(undefined)
+     useEffect(()=>{
+if(url){
+    uploadFields()
+}
+     },[url])
 
-     // const onInput=(e)=>{
-     //      setSignup({...signup,[e.target.name]: e.target.value});
-     //  }
+     const uploadPic=()=>{
+        const data = new FormData()
+  data.append("file",image)
+  data.append("upload_preset","insta-clone")
+  data.append("cloud_name","bhoomicloud")
+  fetch("https://api.cloudinary.com/v1_1/bhoomicloud/image/upload",{
+      method:"post",
+      body:data
+  })
+  .then(res=>res.json())
+  .then(data=>{
+     setUrl(data.url)
+    //  console.log(data)
+  })
+  .catch(err=>{
+      console.log(err)
+  })
+     }
+
+     const uploadFields=()=>{
+        if(!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+            M.toast({html: "invalid email",classes:"#c62828 red darken-3"})
+            return
+        }
+      
+      
+       fetch("http://localhost:8000/signup",{
+            method:"post",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                name,
+                password,
+                email,
+                pic:url
+            })
+        }).then(res=>res.json())
+        .then(data=>{
+           if(data.error){
+              M.toast({html: data.error,classes:"#c62828 red darken-3"})
+           }
+           else{
+               M.toast({html:data.message,classes:"#f48fb1 pink lighten-3"})
+               navigate('/login')
+           }
+        }).catch(err=>{
+            console.log(err)
+        })
+     }
 
      const postData=()=>{
-          // const url = "http://localhost:8000/signup";
-          // const response= await axios.post(url,signup);
-          // console.log(response);
-
-          // if(response.isSuccess){
-          //      showError('');
-          //      setSignup(signupInitial);
-          // }
-          // else{ 
-          //      showError('Something went wrong!Please try again');
-          //  }
-          if(!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
-               M.toast({html: "invalid email",classes:"#c62828 red darken-3"})
-               return
-           }
-         
-         
-          fetch("http://localhost:8000/signup",{
-               method:"post",
-               headers:{
-                   "Content-Type":"application/json"
-               },
-               body:JSON.stringify({
-                   name,
-                   password,
-                   email,
-               //     pic:url
-               })
-           }).then(res=>res.json())
-           .then(data=>{
-              if(data.error){
-                 M.toast({html: data.error,classes:"#c62828 red darken-3"})
-              }
-              else{
-                  M.toast({html:data.message,classes:"#f48fb1 pink lighten-3"})
-                  navigate('/login')
-              }
-           }).catch(err=>{
-               console.log(err)
-           })
+          
+          if(image){
+            uploadPic()
+          }
+          else{
+uploadFields()
+          }
+          
        
 
      }
@@ -79,6 +101,15 @@ const Signup= () => {
         <input type="password" placeholder="Password" 
            value={password}
            onChange={(e)=>setPassword(e.target.value)}></input>
+           <div className="file-field input-field">
+      <div className="btn #f48fb1 pink lighten-3">
+        <span>Upload Image</span>
+        <input type="file" onChange={(e)=>setImage(e.target.files[0])} />
+      </div>
+      <div className="file-path-wrapper">
+        <input className="file-path validate" type="text" />
+      </div>
+    </div>
         <button className="btn waves-effect waves-light #f48fb1 pink lighten-3" onClick={()=> postData()}>SIGNUP
        
   </button>

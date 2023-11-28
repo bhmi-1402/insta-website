@@ -13,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const router= require('./routes/auth')
 const router2=require('./routes/post')
+app.use(require('./routes/user'))
 
 app.use(router);
 app.use(router2);

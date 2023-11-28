@@ -10,7 +10,7 @@ const Home = () => {
 
     const [data, setData] = useState([])
     useEffect(() => {
-        fetch('http://localhost:8000/allpost', {
+        fetch('http://localhost:8000/getsubpost', {
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("jwt")
             }
@@ -32,7 +32,6 @@ const Home = () => {
             body: JSON.stringify({
                 postId: id
             })
-
         }).then(res => res.json())
             .then(result => {
                 console.log(result)
@@ -150,18 +149,13 @@ const Home = () => {
     return (
 
 
-
-
         <div className='home'>
     {data.map(item => (
         <div className='card home-card' key={item._id}>
             <h5>
-
-
                 <Link to={item.postedBy._id !== date._id ? `/profile/${item.postedBy._id}` : '/profile/'}>
                     {item.postedBy.name}
                 </Link>
-
             </h5>
             <h5>
                 {item.postedBy._id === date._id && (

@@ -14,9 +14,22 @@ const user = createSlice({
         removeUser:(state,action)=>{
             state.data=false;
             return
+        },
+        updateUser:(state,action)=>{
+            return{
+                ...state.data,
+                followers:action.payload.followers,
+                following:action.payload.following
+            }
+        },
+        updatePic:(state,action)=>{
+            return{
+                ...state.data,
+                pic:action.payload.pic
+            }
         }
     }
 })
 
-export const { addUser,removeUser } = user.actions
+export const { addUser,removeUser,updateUser,updatePic } = user.actions
 export default user.reducer;

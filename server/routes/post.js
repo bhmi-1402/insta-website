@@ -8,7 +8,23 @@ const Post=require('../models/post')
 router.get('/allpost',requireLogin,(req,res)=>{
     Post.find()
     .populate("postedBy","_id name")
-    // .populate("comments.postedBy","_id name")
+    .populate("comments.postedBy","_id name")
+    // .sort('-createdAt')
+    .then(posts=>{
+        res.json({posts})
+    })
+    .catch(err=>{
+        console.log(err)
+    })
+    
+})
+
+router.get('/getsubpost',requireLogin,(req,res)=>{
+
+
+    Post.find({ postedBy:{$in:req.user.following}})
+    .populate("postedBy","_id name")
+    .populate("comments.postedBy","_id name")
     // .sort('-createdAt')
     .then(posts=>{
         res.json({posts})
@@ -22,17 +38,18 @@ router.get('/allpost',requireLogin,(req,res)=>{
 
 
 
-router.post('/postcreate',requireLogin,(req,res)=>{
+router.post('/postcreate',requireLogin,async (req,res)=>{
     const {title,body,pic} = req.body 
     if(!title || !body || !pic){
       return  res.send({error:"Please add all the fields"})
     }
     // req.user.password = 
-    const post = new Post({
+    console.log(req.user);
+    const post = await new Post({
         title,
         body,
         photo:pic,
-        postedBy:req.user
+        postedBy:req.user._id
     })
     post.save().then(result=>{
         res.json({post:result})
@@ -41,47 +58,115 @@ router.post('/postcreate',requireLogin,(req,res)=>{
         console.log(err)
     })
 })
-router.get('/mypost',requireLogin,(req,res)=>{
-    Post.find({postedBy:req.user._id})
-    .populate("PostedBy","_id name")
-    // .populate("comments.postedBy","_id name")
-    // .sort('-createdAt')
-    .then(mypost=>{
-        res.json({mypost})
-    })
-    .catch(err=>{
-        console.log(err)
-    })
-    
-})
-router.put('/like',(req,res)=>{
-    Post.findByIdAndUpdate(req.body.postId,{
-    $push:{likes:req.user._id}
+
+router.get('/mypost', requireLogin, async (req, res) => {
+    try {
+        const posts = await Post.find({ postedBy: req.user._id })
+            .populate('postedBy', '_id name')
+            .sort('-createdAt');
+
+        console.log(posts);
+        res.json({ mypost: posts });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+
+
+
+
+
+
+
+
+router.post('/like', requireLogin, async (req, res) => {
+    try {
+        console.log(req.user);
+
+        const result = await Post.findByIdAndUpdate(
+            req.body.postId,
+            {
+                $push: { likes: req.user._id },
+            },
+            {
+                new: true,
+            }
+        )
+            .populate('postedBy', '_id name ')
+            .exec();
+        console.log(result);
+        res.json(result);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+
+router.post('/unlike',requireLogin,async(req,res)=>{
+    console.log(req.user)
+    try {
+    const result = await Post.findByIdAndUpdate(req.body.postId,{
+        $pull:{likes:req.user._id}
     },{
         new:true
-    }).exec((err,result)=>{
-        if(err){
-            return res.send({error:err})
-        }
-        else{
-            res.json(result)
-        }
-    })
+    }).exec()
+
+    console.log(result);
+    res.json(result);
+    } catch (error) {
+        console.log(error);
+    }
 })
 
 
+router.post('/comment', requireLogin, async (req, res) => {
+    try {
+        console.log(req.body);
 
-router.put('/unlike',requireLogin,(req,res)=>{
-    Post.findByIdAndUpdate(req.body.postId,{
-    $pull:{likes:req.user._id}
-    },{
-        new:true
-    }).exec((err,result)=>{
-        if(err){
-            return res.send({error:err})
+        const comment = {
+            text: req.body.text,
+            postedBy: req.user._id,
+        };
+
+        const result = await Post.findByIdAndUpdate(
+            req.body.postId,
+            {
+                $push: { comments: comment }
+            },
+            {
+                new: true,
+            }
+        )
+            .populate('comments.postedBy', '_id name')
+            .populate('postedBy', '_id name')
+            .exec();
+
+        res.json(result);
+    } catch (err) {
+        console.error(err);
+        res.send({ error: 'Internal Server Error' });
+    }
+});
+
+
+router.delete('/deletepost/:postId',requireLogin,(req,res)=>{
+    console.log(req.body)
+    Post.findOne({_id:req.params.postId})
+    .populate("postedBy","_id")
+    .exec((err,post)=>{
+        if(err || !post){
+            return res.status(422).json({error:err})
         }
-        else{
-            res.json(result)
+        if(post.postedBy._id.toString() === req.user._id.toString()){
+              post.remove()
+              .then(result=>{
+                  res.json(result)
+              }).catch(err=>{
+                  console.log(err)
+              })
         }
     })
 })

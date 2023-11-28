@@ -3,6 +3,8 @@ import {Link,useNavigate} from 'react-router-dom'
 import {  useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux'
 import { removeUser } from '../store/userSlice'
+
+
 const Navbar = () => {
   const data = useSelector((state)=>state.user.data);
 const dispatch = useDispatch();
@@ -23,6 +25,7 @@ const Navigate=useNavigate()
           <li>
           <Link to={'/profile'}>Profile</Link>
           </li>
+          <li><Link to="/myfollowingpost">My following Posts</Link></li>
           <li>
           <button className="btn waves-effect waves-light #f48fb1 pink lighten-3" 
           onClick={()=> {

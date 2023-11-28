@@ -52,3 +52,6 @@ margin-top: 120px ;
   margin:26px auto;
 
 }
+.material-icons:hover{
+  cursor: pointer;
+}
