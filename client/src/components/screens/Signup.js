@@ -3,6 +3,8 @@ import {Link,useNavigate} from "react-router-dom"
 import M from 'materialize-css'
 import { GoogleOAuthProvider,GoogleLogin} from '@react-oauth/google';
 import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
+
 
 // const signupInitial={
 //      name: '',
@@ -117,17 +119,21 @@ uploadFields()
 
 
   
-<h6></h6>
-
-       <GoogleOAuthProvider clientId="<your_client_id>">
+<h6  className='far'>
+<Link to="/">
+       <GoogleOAuthProvider clientId="310421589776-nkvpfplh15uh3jple9hq3kpcq6abq4g6.apps.googleusercontent.com">
        <GoogleLogin
   onSuccess={credentialResponse => {
-    console.log(credentialResponse);
+    const decoded = jwtDecode(credentialResponse.credential);
+
+    console.log(decoded);
   }}
   onError={() => {
     console.log('Login Failed');
   }}
 /></GoogleOAuthProvider>
+</Link>
+</h6>
 <h6>Already have an account ?
        <Link to="/login" className='q'>Login</Link>
        </h6>

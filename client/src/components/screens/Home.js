@@ -5,9 +5,10 @@ import {Link, useNavigate} from 'react-router-dom'
 import M from 'materialize-css'
 
 const Home = () => {
-    const date = useSelector((state) => state.user.data);
+    
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const date = useSelector((state) => state.user.data);
 
     useEffect(()=>{
         if(!date){
@@ -182,17 +183,17 @@ const Home = () => {
             </div>
             <div className='card-content'>
                 <i className="material-icons">favorite</i>
-                {/* {item.likes.includes(date._id) ? (
+                {item.likes.includes(date._id) ? (
                     <i className="material-icons" onClick={() => unlikePost(item._id)}>thumb_down</i>
                 ) : (
                     <i className="material-icons" onClick={() => likePost(item._id)}>thumb_up</i>
-                )} */}
+                )}
                 <h6>{item.likes.length} likes</h6>
                 <h6>{item.title}</h6>
                 <p>{item.body}</p>
                 {item.comments.map(record => (
                     <h6 key={record._id}>
-                        {/* <span style={{ fontWeight: "500" }}>{record.postedBy.name}:</span>s */}
+                        {/* <span style={{ fontWeight: "500" }}>{record.postedBy.name}:</span> */}
                         {record.text}
                     </h6>
                 ))}

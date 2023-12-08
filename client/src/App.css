@@ -33,7 +33,8 @@ margin-top: 120px ;
 }
 .input-field .q{
   color:blue  !important;
-  cursor: "pointer" 
+  cursor: "pointer" ;
+  margin-top:25px;
 }
 
 .gallery{
@@ -52,6 +53,18 @@ margin-top: 120px ;
   margin:26px auto;
 
 }
+.collection-item{
+  width:100%;
+}
 .material-icons:hover{
   cursor: pointer;
 }
+.input-field .far{
+  cursor:pointer;
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+   
+}
+
+  
