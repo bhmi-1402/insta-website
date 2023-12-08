@@ -81,15 +81,15 @@ router.post('/unfollow', requireLogin, async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
-router.post('/updatepic', requireLogin, async (req, res) => {
-    console.log(req.body)
+
+router.post('/updatepic',  async (req, res) => {
+    console.log("here",req.body)
+    const {userID,pic} = req.body;
     try {
         
-        const updatedUser = await User.findByIdAndUpdate(
-            req.user._id,
-            { $set: { pic: req.body.pic } },
-            { new: true }
-        );
+        const updatedUser = await User.findByIdAndUpdate(userID,{
+            pic : pic
+        });
 
         if (!updatedUser) {
             return res.status(404).json({ error: "User not found" });

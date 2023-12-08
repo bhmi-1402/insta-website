@@ -23,10 +23,7 @@ const user = createSlice({
             }
         },
         updatePic:(state,action)=>{
-            return{
-                ...state.data,
-                pic:action.payload.pic
-            }
+            state.data.pic = action.payload;
         }
     }
 })

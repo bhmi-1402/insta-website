@@ -1,46 +1,44 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux';
-import {Link, Navigate, useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import M from 'materialize-css'
 
 const Home = () => {
-
-    const navigate = useNavigate();
-
     const date = useSelector((state) => state.user.data);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+        if(!date){
+            navigate('/');
+        }
+    },[]);
 
     const [data, setData] = useState([])
     useEffect(() => {
-        if(!date){
-            console.log(date);
-            navigate('/login');
-        }else{
-
-            
-            fetch('http://localhost:8000/allpost', {
-                headers: {
-                    "Authorization": "Bearer " + localStorage.getItem("jwt")
-                }
-            }).then(res => res.json())
+        fetch('http://localhost:8000/allpost', {
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("jwt")
+            }
+        }).then(res => res.json())
             .then(result => {
                 console.log(result)
                 setData(result.posts)
             })
-        }
     }, [])
     const likePost = (id) => {
         console.log(id);
         fetch("http://localhost:8000/like", {
             method: "post",
             headers: {
+
                 "Content-Type": "application/json",
                 "Authorization": "Bearer " + localStorage.getItem("jwt")
 
             },
             body: JSON.stringify({
-                postId: id
+                postId:id
             })
 
         }).then(res => res.json())
@@ -163,39 +161,38 @@ const Home = () => {
 
 
         <div className='home'>
-    {data.map(item => (
+    {data?.map(item => (
         <div className='card home-card' key={item._id}>
-            <h5>
+            {/* <h5 style={{padding:"5px"}}>
 
 
-                <Link to={item.postedBy._id !== date._id ? `/profile/${item.postedBy._id}` : '/profile/'}>
+                <Link to={item.postedBy._id !== date._id ? "/profile/"+item.postedBy._id:'/profile'}>
                     {item.postedBy.name}
                 </Link>
 
-            </h5>
-            <h5>
-                {item.postedBy._id === date._id && (
+            
+                {item.postedBy._id == date._id && (
                     <i className="material-icons" style={{ float: "right" }} onClick={() => deletePost(item._id)}>
                         delete
                     </i>
                 )}
-            </h5>
+            </h5> */}
             <div className="card-image">
                 <img src={item.photo} alt={item.title} />
             </div>
             <div className='card-content'>
                 <i className="material-icons">favorite</i>
-                {item.likes.includes(date._id) ? (
+                {/* {item.likes.includes(date._id) ? (
                     <i className="material-icons" onClick={() => unlikePost(item._id)}>thumb_down</i>
                 ) : (
                     <i className="material-icons" onClick={() => likePost(item._id)}>thumb_up</i>
-                )}
+                )} */}
                 <h6>{item.likes.length} likes</h6>
                 <h6>{item.title}</h6>
                 <p>{item.body}</p>
                 {item.comments.map(record => (
                     <h6 key={record._id}>
-                        <span style={{ fontWeight: "500" }}>{record.postedBy.name}:</span>
+                        {/* <span style={{ fontWeight: "500" }}>{record.postedBy.name}:</span>s */}
                         {record.text}
                     </h6>
                 ))}

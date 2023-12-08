@@ -1,6 +1,7 @@
 import {React,useEffect,useState} from 'react'
 import {Link,useNavigate} from "react-router-dom"
 import M from 'materialize-css'
+import { GoogleOAuthProvider,GoogleLogin} from '@react-oauth/google';
 import axios from 'axios';
 
 // const signupInitial={
@@ -113,9 +114,24 @@ uploadFields()
         <button className="btn waves-effect waves-light #f48fb1 pink lighten-3" onClick={()=> postData()}>SIGNUP
        
   </button>
-  <h6>Already have an account ?
+
+
+  
+<h6></h6>
+
+       <GoogleOAuthProvider clientId="<your_client_id>">
+       <GoogleLogin
+  onSuccess={credentialResponse => {
+    console.log(credentialResponse);
+  }}
+  onError={() => {
+    console.log('Login Failed');
+  }}
+/></GoogleOAuthProvider>
+<h6>Already have an account ?
        <Link to="/login" className='q'>Login</Link>
        </h6>
+       
   </div>
       </div>
  )

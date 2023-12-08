@@ -13,25 +13,27 @@ import { addUser } from './store/userSlice'
 import {  useSelector } from 'react-redux';
 import UserProfile from './components/screens/UserProfile'
 import Subscribed from './components/screens/Subscribed'
+import Reset from './components/screens/Reset'
+import NewPassword from './components/screens/NewPassword'
 
   
 
 
-function App() {
+const App=()=> {
+
+  // const navigate = useNavigate();
   const data = useSelector((state)=>state.user.data);
   const dispatch = useDispatch();
-    // const Navigate = useNavigate();
-
-  
   useEffect(()=>{
     const users=JSON.parse(localStorage.getItem('users'))
     if(users){
       dispatch(addUser(data.users))
     }
     else{
-      // Navigate('/login');
+      // if(!navigate.location.pathname.startsWith('/reset'))
+      // navigate('/login');
     }
-  })
+  },[])
   
 
   return (
@@ -48,6 +50,8 @@ function App() {
  <Route path="/createpost" element ={<CreatePost></CreatePost>}></Route> 
  <Route path='/profile/:userid' element ={<UserProfile/>}></Route>
  <Route path='/myfollowingpost' element ={<Subscribed/>}></Route>
+ <Route exact path='/reset' element ={<Reset/>}></Route>
+ <Route path='/reset/:token' element ={<NewPassword/>}></Route>
   </Routes> 
   </>
   

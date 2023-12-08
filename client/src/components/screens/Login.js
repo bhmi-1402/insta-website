@@ -66,6 +66,9 @@ const Login = () => {
         <h6>Don't have an account ?
         <Link to="/signup" className='q'>Signup</Link>
        </h6>
+       <h6>
+        <Link to="/reset" className='q'>Forgot password</Link>
+       </h6>
  
   </div>
       </div>

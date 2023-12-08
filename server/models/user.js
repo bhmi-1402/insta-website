@@ -13,8 +13,8 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    // resetToken:String,
-    // expireToken:Date,
+    resetToken:String,
+    expireToken:Date,
     pic:{
      type:String,
      default:"https://res-console.cloudinary.com/bhoomicloud/thumbnails/v1/image/upload/v1701084890/ZGVmX3BtdTYycg==/grid_landscape"

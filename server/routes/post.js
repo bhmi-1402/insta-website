@@ -5,23 +5,19 @@ const requireLogin= require('../middleware/requireLogin')
 const Post=require('../models/post')
 
 
-router.get('/allpost',requireLogin,(req,res)=>{
-    Post.find()
-    .populate("postedBy","_id name")
-    .populate("comments.postedBy","_id name")
-    // .sort('-createdAt')
-    .then(posts=>{
-        res.json({posts})
-    })
-    .catch(err=>{
-        console.log(err)
-    })
+router.get('/allpost',requireLogin, async (req,res)=>{
+    try {
+        const posts = await Post.find().populate("postedBy","_id name").populate("comments.postedBy","_id name").sort('-createdAt').limit(6);
+        res.send({posts});
+        return;
+    } catch (error) {
+    }
+   
     
 })
 
 router.get('/getsubpost',requireLogin,(req,res)=>{
-
-
+    
     Post.find({ postedBy:{$in:req.user.following}})
     .populate("postedBy","_id name")
     .populate("comments.postedBy","_id name")
@@ -41,7 +37,8 @@ router.get('/getsubpost',requireLogin,(req,res)=>{
 router.post('/postcreate',requireLogin,async (req,res)=>{
     const {title,body,pic} = req.body 
     if(!title || !body || !pic){
-      return  res.send({error:"Please add all the fields"})
+      res.send({error:"Please add all the fields"})
+      return;
     }
     // req.user.password = 
     console.log(req.user);
@@ -54,6 +51,7 @@ router.post('/postcreate',requireLogin,async (req,res)=>{
     post.save().then(result=>{
         res.json({post:result})
     })
+
     .catch(err=>{
         console.log(err)
     })
@@ -72,14 +70,6 @@ router.get('/mypost', requireLogin, async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
-
-
-
-
-
-
-
 
 router.post('/like', requireLogin, async (req, res) => {
     try {
@@ -158,7 +148,8 @@ router.delete('/deletepost/:postId',requireLogin,(req,res)=>{
     .populate("postedBy","_id")
     .exec((err,post)=>{
         if(err || !post){
-            return res.status(422).json({error:err})
+         res.status(422).json({error:err})
+         return
         }
         if(post.postedBy._id.toString() === req.user._id.toString()){
               post.remove()

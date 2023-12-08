@@ -2,15 +2,16 @@ import React ,{useEffect, useState}from 'react'
 import { useDispatch } from 'react-redux'
 import {  useSelector } from 'react-redux';
 import { updatePic } from '../../store/userSlice'
+import axios from 'axios';
 
 const Profile = () => {
     const [mypics,setPics] =useState([])
     const state = useSelector((state)=>state.user.data);
-    console.log(state)
 const dispatch = useDispatch();
 
 const [image,setImage] =useState("")
 const [url,setUrl]=useState("")
+
 useEffect(()=>{
     fetch('http://localhost:8000/mypost',{
         headers:{
@@ -21,43 +22,32 @@ useEffect(()=>{
         // console.log(result)
         setPics(result.mypost)
     })
-  },[])
-  useEffect(() => {
-    if (image) {
-        const data = new FormData();
-        data.append("file", image);
-        data.append("upload_preset", "insta-clone");
-        data.append("cloud_name", "bhoomicloud");
+  },[]);
 
-        fetch("https://api.cloudinary.com/v1_1/bhoomicloud/image/upload", {
-            method: "post",
-            body: data
-        })
-        .then(res => res.json())
-        .then(data => {
-  fetch('http//localhost:8000/updatepic',{
-    method:"post",
-    headers:{
-        "Content-type":"application/json",
-        "Authorization":"Bearer "+localStorage.getItem('jwt')
-    },
-    body:JSON.stringify({
-        pic:data.url
-    })
-}).then(res=>res.json())
-.then(result=>{
-    console.log(result)
-    localStorage.setItem("user", JSON.stringify({ ...state, pic: result.pic }));
-            dispatch(updatePic(result.pic));
+  const updateProfilePicHandler = async ()=>{
+    try {
+        if(image){
+            const data = new FormData();
+            data.append("file", image);
+            data.append("upload_preset", "insta-clone");
+            data.append("cloud_name", "bhoomicloud");
+            const resByCloudinary = await axios.post('https://api.cloudinary.com/v1_1/bhoomicloud/image/upload',data);
+            console.log(resByCloudinary);
+
+            const resByUpdatePic = await axios.post('http://localhost:8000/updatepic',{
+                pic:data.url,
+                userID:state?._id
+            });
+            console.log(resByUpdatePic);
+            dispatch(updatePic(resByUpdatePic.data.pic));
+        }
+    } catch (error) {
         
-})
-           
-        })
-        .catch(err => {
-            console.error("Error uploading image to Cloudinary:", err);
-            
-        });
     }
+  };
+
+  useEffect(() => {
+    updateProfilePicHandler();
 }, [image]);
 
 const updatePhoto=(file)=>{

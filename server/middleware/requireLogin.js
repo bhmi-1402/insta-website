@@ -6,9 +6,11 @@ const User= require('../models/user')
 
 module.exports=(req,res,next)=>{
 
+   
+
     const{authorization}=req.headers
     if(!authorization){
-        res.send({error:"you must be logged in"})
+          res.send({error:"you must be logged in"})
     }
     const token=authorization.replace("Bearer ","")
     jwt.verify(token,JWT_SECRET,(err,payload)=>{
@@ -20,7 +22,6 @@ module.exports=(req,res,next)=>{
             console.log(userdata);
             req.user=userdata
             next()
-        })
-       
+        });
     })
 }
