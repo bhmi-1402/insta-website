@@ -26,6 +26,7 @@ useEffect(()=>{
 
   const updateProfilePicHandler = async ()=>{
     try {
+        console.log(image);
         if(image){
             const data = new FormData();
             data.append("file", image);
@@ -35,7 +36,7 @@ useEffect(()=>{
             console.log(resByCloudinary);
 
             const resByUpdatePic = await axios.post('http://localhost:8000/updatepic',{
-                pic:data.url,
+                pic:resByCloudinary?.data?.secure_url,
                 userID:state?._id
             });
             console.log(resByUpdatePic);

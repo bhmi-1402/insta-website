@@ -155,10 +155,11 @@ router.post('/reset-password', async (req, res) => {
   router.post('/new-password', (req, res) => {
     const newPassword = req.body.password;
     const sentToken = req.body.token;
+    console.log(newPassword,sentToken);
   
     User.findOne({
       resetToken: sentToken,
-      expireToken: { $gt: Date.now() }
+      expireToken: { $gt: Date.now()+360000 }
     })
       .then(user => {
         if (!user) {

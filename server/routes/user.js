@@ -85,6 +85,7 @@ router.post('/unfollow', requireLogin, async (req, res) => {
 router.post('/updatepic',  async (req, res) => {
     console.log("here",req.body)
     const {userID,pic} = req.body;
+    console.log(pic);
     try {
         
         const updatedUser = await User.findByIdAndUpdate(userID,{

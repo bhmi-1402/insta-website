@@ -142,23 +142,28 @@ router.post('/comment', requireLogin, async (req, res) => {
 });
 
 
-router.delete('/deletepost/:postId',requireLogin,(req,res)=>{
-    console.log(req.body)
-    Post.findOne({_id:req.params.postId})
-    .populate("postedBy","_id")
-    .exec((err,post)=>{
-        if(err || !post){
-         res.status(422).json({error:err})
-         return
+router.delete('/deletepost/:postId', requireLogin, async (req, res) => {
+    console.log(req.params.postId);
+
+    try {
+        const post = await Post.findOne({_id: req.params.postId})
+            .populate("postedBy", "_id")
+            .exec();
+
+        if (!post) {
+            return res.status(422).json({error: "Post not found"});
         }
-        if(post.postedBy._id.toString() === req.user._id.toString()){
-              post.remove()
-              .then(result=>{
-                  res.json(result)
-              }).catch(err=>{
-                  console.log(err)
-              })
+
+        if (post.postedBy._id.toString() === req.user._id.toString()) {
+            await post.deleteOne();
+            res.json({message: "Post deleted successfully"});
+        } else {
+            res.status(401).json({error: "Unauthorized access"});
         }
-    })
-})
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({error: "Internal Server Error"});
+    }
+});
+
 module.exports=router;
