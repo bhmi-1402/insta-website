@@ -1,7 +1,7 @@
 const express= require('express');
 const app=express();
 const mongoose=require('mongoose');
-const PORT=8000;
+const PORT= process.env.PORT || 8000;
 const {MONGO_URL}=require('./keys');
 const cors=require('cors');
 const bodyParser = require("body-parser");
@@ -32,10 +32,10 @@ mongoose.connection.on('error',(err)=>{
 })
 app.use(express.json());
 
+app.get("/",(req,res)=>{
+    res.send("bhoomi");
+})
 
 app.listen(PORT,()=>{
     console.log(`server is running on the ${PORT}`);
-})
-app.get("/",(req,res)=>{
-    res.send("bhoomi");
 })
