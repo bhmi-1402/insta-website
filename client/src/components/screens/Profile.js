@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux'
 import {  useSelector } from 'react-redux';
 import { updatePic } from '../../store/userSlice'
 import axios from 'axios';
+import path from '../../path';
+
 
 const Profile = () => {
     const [mypics,setPics] =useState([])
@@ -13,7 +15,7 @@ const [image,setImage] =useState("")
 const [url,setUrl]=useState("")
 
 useEffect(()=>{
-    fetch('http://localhost:8000/mypost',{
+    fetch(path+'/mypost',{
         headers:{
             "Authorization":"Bearer "+localStorage.getItem("jwt")
         }
@@ -35,7 +37,7 @@ useEffect(()=>{
             const resByCloudinary = await axios.post('https://api.cloudinary.com/v1_1/bhoomicloud/image/upload',data);
             console.log(resByCloudinary);
 
-            const resByUpdatePic = await axios.post('http://localhost:8000/updatepic',{
+            const resByUpdatePic = await axios.post(path+'/updatepic',{
                 pic:resByCloudinary?.data?.secure_url,
                 userID:state?._id
             });

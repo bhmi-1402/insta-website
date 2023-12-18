@@ -4,6 +4,7 @@ import M from 'materialize-css'
 import { GoogleOAuthProvider,GoogleLogin} from '@react-oauth/google';
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
+import path from '../../path';
 
 
 // const signupInitial={
@@ -55,7 +56,7 @@ if(url){
         }
       
       
-       fetch("http://localhost:8000/signup",{
+       fetch( path +"/signup",{
             method:"post",
             headers:{
                 "Content-Type":"application/json"

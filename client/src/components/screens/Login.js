@@ -3,6 +3,8 @@ import {Link,useNavigate} from "react-router-dom"
 import M from 'materialize-css'
 import { useDispatch } from 'react-redux'
 import { addUser } from '../../store/userSlice'
+import path from '../../path';
+
 
 const Login = () => {
     
@@ -23,7 +25,7 @@ const Login = () => {
          }
        
        
-        fetch("http://localhost:8000/login",{
+        fetch(path+"/login",{
              method:"post",
              headers:{
                  "Content-Type":"application/json"

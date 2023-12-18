@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux';
 import {Link, useNavigate} from 'react-router-dom'
 import M from 'materialize-css'
+import path from '../../path';
 
 const Home = () => {
     
@@ -18,7 +19,7 @@ const Home = () => {
 
     const [data, setData] = useState([])
     useEffect(() => {
-        fetch('http://localhost:8000/allpost', {
+        fetch(path+'/allpost', {
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("jwt")
             }
@@ -31,7 +32,7 @@ const Home = () => {
     console.log(data);
     const likePost = (id) => {
         console.log(id);
-        fetch("http://localhost:8000/like", {
+        fetch(path + "/like", {
             method: "post",
             headers: {
 
@@ -66,7 +67,7 @@ const Home = () => {
 
 
     const unlikePost = (id) => {
-        fetch("http://localhost:8000/unlike", {
+        fetch(path+"/unlike", {
             method: "post",
             headers: {
                 "Content-Type": "application/json",
@@ -98,7 +99,7 @@ const Home = () => {
         try {
             console.log(text);
     
-            const response = await fetch('http://localhost:8000/comment', {
+            const response = await fetch(path+'/comment', {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",
@@ -131,7 +132,7 @@ const Home = () => {
     const deletePost = async (postId) => {
         console.log(postId)
         try {
-            const response = await fetch(`http://localhost:8000/deletepost/${postId}`, {
+            const response = await fetch(`${path}/deletepost/${postId}`, {
                 method: "delete",
                 headers: {
                     "Content-Type": "application/json",

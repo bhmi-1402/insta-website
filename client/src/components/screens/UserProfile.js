@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import {  useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { updateUser } from '../../store/userSlice'
+import path from '../../path';
 
 const Profile = () => {
     const [userProfile,setProfile] =useState(null)
@@ -17,7 +18,7 @@ const [showFollow,setShowFollow]=useState(data?!data.following.includes(userid):
 
 
 useEffect(() => {
-    fetch(`http://localhost:8000/user/${userid}`, {
+    fetch(path+`/user/${userid}`, {
         headers: {
             "Authorization": "Bearer " + localStorage.getItem("jwt")
         }
@@ -33,7 +34,7 @@ useEffect(() => {
     });
 }, []);
 const followUser = ()=>{
-    fetch('http://localhost:8000/follow',{
+    fetch(path+'/follow',{
         method:"post",
         headers:{
             "Content-Type":"application/json",
@@ -63,7 +64,7 @@ const followUser = ()=>{
     })
 }
 const unfollowUser = ()=>{
-    fetch('http://localhost:8000/unfollow',{
+    fetch(path+'/unfollow',{
         method:"post",
         headers:{
             "Content-Type":"application/json",

@@ -1,6 +1,8 @@
 import React,{useState,useEffect} from 'react'
 import {Link,useNavigate} from "react-router-dom"
 import M from 'materialize-css'
+import path from '../../path';
+
 
 const CreatePost = () => {
   const navigate=useNavigate();
@@ -10,7 +12,7 @@ const[image,setImage]=useState('')
 const[url,setUrl]=useState('')
 useEffect(()=>{
   if(url){
-fetch("http://localhost:8000/postcreate",{
+fetch(path+"/postcreate",{
   method:"post",
   headers:{
       "Content-Type":"application/json",

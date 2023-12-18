@@ -3,6 +3,7 @@ import {Link,useNavigate} from "react-router-dom"
 import M from 'materialize-css'
 import { useDispatch } from 'react-redux'
 import { addUser } from '../../store/userSlice'
+import path from '../../path'
 
 const Reset = () => {
     
@@ -24,7 +25,7 @@ const Reset = () => {
        
        
          try {
-            const response = await fetch("http://localhost:8000/reset-password", {
+            const response = await fetch(path+"/reset-password", {
               method: "post",
               headers: {
                 "Content-Type": "application/json",

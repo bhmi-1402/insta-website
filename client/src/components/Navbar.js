@@ -4,7 +4,7 @@ import {  useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux'
 import { removeUser } from '../store/userSlice'
 import M from 'materialize-css'
-
+import path from '../path';
 
 const Navbar = () => {
 
@@ -19,7 +19,7 @@ useEffect(()=>{
 },[])
 const fetchUsers=(query)=>{
 setSearch(query)
-fetch('http://localhost:8000/search-users',{
+fetch(path+'/search-users',{
   method:"post",
   headers:{
     "Content-Type":"application/json"
